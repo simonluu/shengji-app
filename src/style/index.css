@@ -1,0 +1,314 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+body {
+  font-family: "Raleway", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+div {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/*Index Page Styling*/
+
+main {
+  margin: 5% auto 0;
+  max-width: 600px;
+  padding: 40px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 200;
+  text-align: center;
+}
+
+h1 {
+  font-size: 36px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h5 > span {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+hr {
+  border-top: 1px solid #AAA;
+  border-bottom: none;
+  margin: 20px 0;
+}
+
+button, .main-button, .secondary-button {
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  background: #FFF;
+  border-radius: 5px;
+  border: 1px solid #AAA;
+  color: #666;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 10px auto;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.main-button {
+  display: inline-block;
+  max-width: 200px;
+}
+
+.secondary-button {
+  display: block;
+  max-width: 400px;
+}
+
+button:hover, .main-button:hover, .secondary-button:hover {
+    border-color: #111;
+    color: #111;
+    text-decoration: none;
+}
+
+button:focus, .main-button:focus, .secondary-button:hover {
+  border-color: #666;
+  outline: none;
+}
+
+button:active, .main-button:active, .secondary-button:hover {
+  border-color: #666;
+  background: #FAFAFA;
+}
+
+button.disabled, button:disabled, button.disabled:hover, button:disabled:hover, .main-button.disabled, .main-button:disabled, .main-button.disabled:hover, .main-button:disabled:hover, .secondary-button.disabled, .secondary-button:disabled, .secondary-button.disabled:hover {
+  border-color: #EEE;
+  color: #EEE;
+  cursor: default;
+}
+
+.players-false {
+  pointer-events: none;
+}
+
+a[disabled] {
+  pointer-events: none;
+}
+
+footer a {
+  font-size: 12px;
+  display: inline-block;
+  text-decoration: underline;
+}
+
+a {
+  color: #666;
+}
+
+a:focus, a:active {
+  color: #111;
+  outline: none;
+}
+
+input {
+  border-radius: 5px;
+  border: 1px solid #AAA;
+  display: block;
+  font-size: 14px;
+  margin: 10px auto;
+  max-width: 400px;
+  padding: 10px 20px;
+  text-align: center;
+  width: 100%;
+}
+
+input:focus {
+  border-color: #666;
+  background: #FAFAFA;
+  outline: none;
+}
+
+p {
+  margin: 10px auto;
+  text-align: left;
+  text-indent: 20px;
+}
+
+ol, ul {
+  text-indent: 0;
+}
+
+/*Game Page Styling*/
+
+.flex-top, .flex-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-middle {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.game-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.game-info {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.card-holder-bottom, .card-holder-left, .card-holder-top, .card-holder-right {
+  display: flex;
+  align-items: center;
+  border: 5px solid black;
+}
+
+.card-holder-bottom, .card-holder-top {
+  flex-direction: row;
+  height: 70px;
+  width: 700px;
+}
+
+.card-holder-left, .card-holder-right {
+  flex-direction: column;
+  height: 550px;
+  width: 70px;
+}
+
+.card-holder-bottom {
+  border-bottom: none;
+}
+
+.card-holder-left {
+  border-left: none;
+}
+
+.card-holder-top {
+  border-top: none;
+}
+
+.card-holder-right {
+  border-right: none;
+}
+
+.left {
+  transform: rotate(90deg);
+}
+
+.top {
+  transform: rotate(180deg);
+}
+
+.right {
+  transform: rotate(270deg);
+}
+
+.true {
+  border-color: red;
+}
+
+.true-0, .true-1, .true-2, .true-3 {
+  color: red;
+}
+
+.playing-card, .card-back {
+  width: 75px;
+  height: 75px;
+}
+
+.playing-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-back {
+  background-image: url('../images/cardback.png');
+  background-size: 75px 150px;
+}
+
+.user-list {
+  padding-left: 150px;
+  padding-right: 150px;
+}
+
+.user-element {
+  text-align: left;
+  flex-grow: 1;
+}
+
+#team {
+  float: right;
+}
+
+.disabled {
+  margin-right: 21px;
+}
+
+.deck {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3em;
+  background-image: url('../images/cardback.png');
+  background-size: 100px 150px;
+  width: 100px;
+  height: 150px;
+}
+
+.reveal-trump-button, .swap-button, .play-button {
+  width: auto;
+}
+
+.selected {
+  color: red;
+}
+
+
+
+
+
+
+
+.loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  transform: translate(-50%, -50%);
+}
+
+.loading-div {
+  text-align: center;
+  background-color: black;
+  color: red;
+  font-weight: bold;
+  font-size: 3em;
+}
