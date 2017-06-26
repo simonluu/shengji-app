@@ -18,7 +18,7 @@ module.exports = function router(app) {
   app.post('/api/create-game', createGame);
   app.post('/api/join-game', joinGame);
   app.post('/api/leave-game', leaveGame);
-  app.post('/api/delete-game', deleteGame);
+  app.delete('/api/delete-game/:id', deleteGame);
   app.post('/api/start-game', startGame);
   app.post('/api/add-to-hand', addToHand);
   app.post('/api/set-master', setMaster);

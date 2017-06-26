@@ -211,9 +211,8 @@ export function leaveGame(gameId, name, index, reroute) {
 }
 
 export function deleteGame(gameId, reroute) {
-  const request = axios.post('/api/delete-game', {
-    gameId,
-  }).then((response) => {
+  const request = axios.delete(`/api/delete-game/${gameId}`)
+  .then((response) => {
     if (response.status === 200) {
       reroute();
     }

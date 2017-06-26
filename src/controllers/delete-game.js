@@ -1,7 +1,7 @@
 const Game = require('../models/game-model');
 
 module.exports = (req, res, next) => {
-  const gameId = req.body.gameId;
+  const gameId = req.params.id;
 
   Game.model.findOneAndRemove({ gameId }, (err, existingGame) => {
     if (err) { return next(err); }

@@ -73,7 +73,7 @@ class Lobby extends Component {
 
   // render methods
   renderUserList() {
-    if (this.props.gameInfo.users !== undefined) {
+    if (this.props.gameInfo.users !== undefined && this.props.gameInfo.teams !== undefined) {
       const userArray = [];
       this.props.gameInfo.users.map((user, index) => {
         if (user === sessionStorage.getItem('currentUser')) {

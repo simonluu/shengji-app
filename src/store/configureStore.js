@@ -16,7 +16,7 @@ const configureStore = () => {
     applyMiddleware(Async, socketIoMiddleware),
   );
 
-  persistStore(store, { blacklist: ['gameInfo', 'currentUser', 'selectedCards', 'swapCards', 'phase', 'teams'] });
+  persistStore(store, { blacklist: ['currentUser', 'selectedCards', 'swapCards', 'phase'] });
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
