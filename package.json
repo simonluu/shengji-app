@@ -21,7 +21,8 @@
     "redux-socket.io": "^1.4.0",
     "shortid": "^2.2.8",
     "socket.io": "^2.0.2",
-    "socket.io-client": "^2.0.2"
+    "socket.io-client": "^2.0.2",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "react-scripts": "1.0.7"
