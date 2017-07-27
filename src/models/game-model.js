@@ -26,6 +26,7 @@ const gameSchema = new Schema({
   player_2: Player.schema,
   player_3: Player.schema,
   player_4: Player.schema,
+  createdAt: { type: Date, expires: 28800, default: Date.now }
 });
 
 const Game = mongoose.model('Game', gameSchema);
