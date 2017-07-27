@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
 import { persistStore, autoRehydrate } from 'redux-persist';
-import uuidv1 from 'uuid/v1';
+import { asyncSessionStorage } from 'redux-persist/storages';
 
 import reducers from '../reducers';
 import Async from '../middlewares/async';
@@ -17,9 +17,9 @@ const configureStore = () => {
     applyMiddleware(Async, socketIoMiddleware),
   );
 
-  persistStore(store, { blacklist: ['currentUser', 'selectedCards', 'swapCards', 'phase'] });
+  persistStore(store, { blacklist: ['currentUser', 'selectedCards', 'swapCards', 'phase'], storage: asyncSessionStorage });
 
-  const saved_game_data = JSON.parse(localStorage.getItem('reduxPersist:gameInfo'));
+  const saved_game_data = JSON.parse(sessionStorage.getItem('reduxPersist:gameInfo'));
 
   if (saved_game_data && saved_game_data.data.gameId) {
     socket.emit('user_reconnect', saved_game_data.data.gameId);
