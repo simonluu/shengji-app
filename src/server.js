@@ -32,29 +32,13 @@ const port = process.env.PORT || 8080;
 const server = http.createServer(app);
 const io = socketio(server);
 
-let user = null;
-
 io.on('connection', (socket) => {
-  socket.on('register', (data) => {
-    console.log('does uniqueUserId exist?', data)
-    user = data;
-    // if (data.getItem('uniqueUserId') === null) {
-    //   // set localStorage
-    //   localStorage.setItem('uniqueUserId', uuidv1());
-    //   console.log('user is just set before', localStorage.getItem('uniqueUserId'))
-    // } else {
-    //   console.log('user exists already', data)
-    // }
+  socket.on('disconnect', () => {
+    console.log('user disconnected')
   });
 
-  socket.on('disconnect', () => {
-    setTimeout(() => {
-      if (user === null) {
-        console.log('user disconnected');
-      } else {
-        console.log('user reconnected');
-      }
-    }, 5000);
+  socket.on('user_reconnect', (data) => {
+    socket.join(data);
   });
 
   socket.on('action', (action) => {

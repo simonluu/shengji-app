@@ -11,7 +11,6 @@ import Card from './card';
 
 // IF A BIG JOKER HAS BEEN PLAYED THE NEXT BIG JOKER DOES NOT WIN.
 // Features to implement:
-// 1. on refresh reconnect to socket.io
 // 3. update UI
 
 class Game extends Component {

@@ -8,16 +8,7 @@ import reducers from '../reducers';
 import Async from '../middlewares/async';
 
 const socket = io();
-if (sessionStorage.getItem('uniqueUserId') === null) {
-  sessionStorage.setItem('uniqueUserId', uuidv1());
-}
-socket.emit('register', sessionStorage.getItem('uniqueUserId'));
 const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
-
-window.onbeforeunload = () => {
-  localStorage.removeItem('uniqueUserId');
-  return '';
-};
 
 const configureStore = () => {
   const store = createStore(
@@ -27,6 +18,12 @@ const configureStore = () => {
   );
 
   persistStore(store, { blacklist: ['currentUser', 'selectedCards', 'swapCards', 'phase'] });
+
+  const saved_game_data = JSON.parse(localStorage.getItem('reduxPersist:gameInfo'));
+
+  if (saved_game_data && saved_game_data.data.gameId) {
+    socket.emit('user_reconnect', saved_game_data.data.gameId);
+  }
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
