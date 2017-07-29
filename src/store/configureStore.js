@@ -3,6 +3,7 @@ import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import { asyncSessionStorage } from 'redux-persist/storages';
+import _ from 'lodash';
 
 import reducers from '../reducers';
 import Async from '../middlewares/async';
@@ -21,7 +22,7 @@ const configureStore = () => {
 
   const saved_game_data = JSON.parse(sessionStorage.getItem('reduxPersist:gameInfo'));
 
-  if (saved_game_data && saved_game_data.data.gameId) {
+  if (saved_game_data && saved_game_data.data.gameId && _.includes(saved_game_data.data.users, store.getState().currentUser)) {
     socket.emit('user_reconnect', saved_game_data.data.gameId);
   }
 
