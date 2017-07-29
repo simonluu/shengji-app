@@ -32,6 +32,6 @@ module.exports = (req, res, next) => {
 
     newGame.save();
 
-    res.send(newGame);
+    res.json(newGame);
   });
 };

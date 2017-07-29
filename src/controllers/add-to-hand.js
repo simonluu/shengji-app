@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
     if (err) { return next(err); }
 
     if (!existingGame) {
-      return res.send(422).send({ error: 'Game does not exist' });
+      return res.status(422).send({ error: 'Game does not exist' });
     }
 
     const currentPlayer = existingGame[playerTurn];

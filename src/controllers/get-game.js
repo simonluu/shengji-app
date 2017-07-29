@@ -8,6 +8,6 @@ module.exports = (req, res, next) => {
       return res.status(422).send({ error: 'Game does not exist' });
     }
 
-    res.send(existingGame);
+    res.json(existingGame);
   });
 };

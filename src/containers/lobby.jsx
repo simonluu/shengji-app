@@ -22,10 +22,6 @@ class Lobby extends Component {
     }
   }
 
-  componentWillUnmount() {
-    // this.helperLeaveGame();
-  }
-
   // on click methods
   onClickLeaveGame() {
     this.helperLeaveGame();

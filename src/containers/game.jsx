@@ -18,6 +18,7 @@ class Game extends Component {
     super(props);
 
     this.state = {
+      error: '',
       phaseTimer: null,
       counter: 5,
     };
@@ -65,6 +66,7 @@ class Game extends Component {
   drawCard() {
     if (this.props.gameInfo.deck.length > 8 && this.props.phase === 'drawPhase') {
       if (this.props.gameInfo[this.props.gameInfo.turn].playerName === sessionStorage.currentUser) {
+        this.setState({ error: '' });
         this.props.addCardToHand(
           this.props.gameInfo.gameId,
           this.props.gameInfo.turn,
@@ -77,6 +79,7 @@ class Game extends Component {
   onRevealTrumpClick() {
     if (this.props.phase === 'drawPhase') {
       const gameId = this.props.gameInfo.gameId;
+      this.setState({ error: '' });
       if (this.props.gameInfo.revealedTrump.length === 0) {
         if (this.props.selectedCards.length === 1) {
           const selectedOne = this.props.selectedCards[0];
@@ -84,7 +87,7 @@ class Game extends Component {
             // call setMaster
             this.props.setNewMaster(gameId, sessionStorage.currentUser, [selectedOne], false);
           } else {
-            console.log('ERROR THE ONE CARD IS NOT A TRUMP NUMBER');
+            this.setState({ error: 'The card you selected is not a Trump' });
           }
         } else if (this.props.selectedCards.length === 2) {
           const selectedOne = this.props.selectedCards[0];
@@ -98,13 +101,13 @@ class Game extends Component {
                 true,
               );
             } else {
-              console.log('ERROR THE TWO CARDS GIVEN ARE NOT TRUMP');
+              this.setState({ error: 'The cards you selected are not Trump' });
             }
           } else {
-            console.log('ERROR THE TWO CARDS ARE NOT THE SAME');
+            this.setState({ error: 'The cards you selected are not the same' });
           }
         } else {
-          console.log('INVALID CARD SELECTION, CHOSE NO CARDS OR TOO MANY CARDS');
+          this.setState({ error: 'You selected 0 cards or too many cards' });
         }
       } else {
         if (this.props.selectedCards.length === 2) {
@@ -120,7 +123,7 @@ class Game extends Component {
                   true,
                 );
               } else {
-                console.log('ERROR THE TWO CARDS GIVEN ARE NOT TRUMP');
+                this.setState({ error: 'The cards you selected are not Trump' });
               }
             } else {
               // already revealed pair,
@@ -132,14 +135,14 @@ class Game extends Component {
                   true,
                 );
               } else {
-                console.log('ERROR YOU PLAYED CARDS LOWER THAN REVEALED CARDS');
+                this.setState({ error: 'The cards you selected are lower than revealed cards' });
               }
             }
           } else {
-            console.log('ERROR TWO CARDS ARE NOT THE SAME');
+            this.setState({ error: 'The cards you selected are not the same' });
           }
         } else {
-          console.log('You tried to reveal a one card trump, but a one card trump has already been revealed. Or you tried to reveal more than 2 cards.');
+          this.setState({ error: 'You tried to reveal a one card trump but a one card trump has already been revealed or you tried to reveal more than 2 cards' });
         }
       }
       this.props.emptySelectedCard();
@@ -148,12 +151,15 @@ class Game extends Component {
 
   swapCardsClick() {
     if (this.props.selectedCards.length === this.props.swapCards.length) {
+      this.setState({ error: '' });
       this.props.swapCard(
         this.props.gameInfo.gameId,
         this.props.swapCards,
         this.props.selectedCards,
       );
       this.props.changePhase(this.props.gameInfo.gameId, 'playPhase');
+    } else {
+      this.setState({ error: 'Please select the same amount of cards' });
     }
     this.props.emptySelectedCard();
     this.props.emptySwapCard();
@@ -162,6 +168,7 @@ class Game extends Component {
   playCardsClick() {
     const gameId = this.props.gameInfo.gameId;
     const sortedSelectedCards = _.orderBy(this.props.selectedCards, ['sortValue'], ['desc']);
+    this.setState({ error: '' });
     // firstPlayed.length === 0 means nobody has played yet, this player is starting.
     if (this.props.gameInfo.firstPlayed.length === 0) {
       // If selectedCards.length === 1 Then they only played one card
@@ -174,15 +181,15 @@ class Game extends Component {
           // Card played is trump check if trump has been broken
           if (this.props.gameInfo.brokenTrump) {
             // Trump has been broken thus is playable
-            console.log('Played One Card Successfully');
+            // Played One Card Successfully
             this.props.playCard(gameId, sortedSelectedCards);
           } else {
             // Trump has not been broken thus not playable
-            console.log('This card is not playable since trump has not been broken');
+            this.setState({ error: 'Trump has not been broken' });
           }
         } else {
           // Card played is not trump, thus is always first playable
-          console.log('Played One Card Successfully');
+          // Played One Card Successfully
           this.props.playCard(gameId, sortedSelectedCards);
         }
       } else if (sortedSelectedCards.length === 2) {
@@ -194,15 +201,15 @@ class Game extends Component {
           if (cardOne.trump) {
             if (this.props.gameInfo.brokenTrump) {
               // Trump has been broken so playable
-              console.log('Played Two Cards Successfully');
+              // Played Two Cards Successfully
               this.props.playCard(gameId, sortedSelectedCards);
             } else {
               // Do nothing since trump has not been broken
-              console.log('These cards are not playable since trump has not been broken');
+              this.setState({ error: 'Trump has not been broken' });
             }
           } else {
             // Always playable since not trump
-            console.log('Played Two Cards Successfully');
+            // Played Two Cards Successfully
             this.props.playCard(gameId, sortedSelectedCards);
           }
         } else if (cardOne.suit === cardTwo.suit) {
@@ -224,29 +231,29 @@ class Game extends Component {
           if (cardOne.trump) {
             if (this.props.gameInfo.brokenTrump) {
               if (run) {
-                console.log('Played Two Card Shuai Successfully');
+                // Played Two Card Shuai Successfully
                 this.props.playCard(gameId, sortedSelectedCards);
               } else {
-                console.log('Played Two Card Shuai that does not run');
+                // Played Two Card Shuai that does not run
                 this.props.playCard(gameId, [cardTwo]);
               }
             } else {
               // Do nothing since trump has not been broken
-              console.log('These cards are not playable since trump has not been broken');
+              this.setState({ error: 'Trump has not been broken' });
             }
           } else {
             // Always playable since not trump
             if (run) {
-              console.log('Played Two Card Shuai Successfully');
+              // Played Two Card Shuai Successfully
               this.props.playCard(gameId, sortedSelectedCards);
             } else {
-              console.log('Played Two Card Shuai that does not run');
+              // Played Two Card Shuai that does not run
               this.props.playCard(gameId, [cardTwo]);
             }
           }
         } else {
           // Cards played not pair or two card shuai.
-          console.log('Played cards not pair or shuai, invalid card play');
+          this.setState({ error: 'Played cards not pair or Shuai' });
         }
       } else if (sortedSelectedCards.length > 2) {
         // Played either a shuai, or Tuolaji
@@ -345,15 +352,15 @@ class Game extends Component {
           if (sortedSelectedCards[0].trump) {
             if (this.props.gameInfo.brokenTrump) {
               // Trump is broken thus playable
-              console.log('Played a Tuolaji');
+              // Played a Tuolaji
               this.props.playCard(gameId, sortedSelectedCards);
             } else {
               // Trump is not broken
-              console.log('These cards are not playable since trump has not been broken');
+              this.setState({ error: 'Trump has not been broken' });
             }
           } else {
             // Always playable
-            console.log('Played a Tuolaji');
+            // Played a Tuolaji
             this.props.playCard(gameId, sortedSelectedCards);
           }
         } else if (isShuai) {
@@ -387,43 +394,43 @@ class Game extends Component {
             if (this.props.gameInfo.brokenTrump) {
               // Trump has been broken, thus playable
               if (run) {
-                console.log('Played a Shuai that runs');
+                // Played a Shuai that runs
                 this.props.playCard(gameId, sortedSelectedCards);
               } else {
                 if (isPair) {
-                  console.log('Played a pair shuai that does not run');
+                  // Played a pair Shuai that does not run
                   this.props.playCard(gameId, [sortedSelectedCards[sortedSelectedCards.length - 2], sortedSelectedCards[sortedSelectedCards.length - 1]]);
                 } else {
-                  console.log('Played a Shuai that does not run');
+                  // Played a Shuai that does not run
                   this.props.playCard(gameId, [sortedSelectedCards[sortedSelectedCards.length - 1]]);
                 }
               }
             } else {
               // Not playable since trump not broken
-              console.log('This hand is not playable since trump has not been broken');
+              this.setState({ error: 'Trump has not been broken' });
             }
           } else {
             // always playable since not trump
             if (run) {
-              console.log('Played a Shuai that runs');
+              // Played a Shuai that runs
               this.props.playCard(gameId, sortedSelectedCards);
             } else {
               if (isPair) {
-                console.log('Played a pair shuai that does not run');
+                // Played a pair Shuai that does not run
                 this.props.playCard(gameId, [sortedSelectedCards[sortedSelectedCards.length - 2], sortedSelectedCards[sortedSelectedCards.length - 1]]);
               } else {
-                console.log('Played a Shuai that does not run');
+                // Played a Shuai that does not run
                 this.props.playCard(gameId, [sortedSelectedCards[sortedSelectedCards.length - 1]]);
               }
             }
           }
         } else {
           // Neither Tuolaji or Shuai
-          console.log('You played neither a Tuolaji or Shuai');
+          this.setState({ error: 'You played neither a Tuolaji or Shuai' });
         }
       } else {
         // Played 0 cards error them
-        console.log('Error you selected 0 cards');
+        this.setState({ error: 'You selected 0 cards' });
       }
     } else {
       // someone has played already
@@ -457,9 +464,10 @@ class Game extends Component {
             }
           }
           if (beforeLength - playable.length === 1 || beforeLength === 0) {
+            // Played One Card
             this.props.playCard(gameId, sortedSelectedCards);
           } else {
-            console.log('You played a card that is a trump or is not the same suit');
+            this.setState({ error: 'You played a card that is a Trump or is not the same suit' });
           }
         } else if (sortedSelectedCards.length === 2) {
           // played two cards, could be a pair or 2 card shuai.
@@ -530,7 +538,7 @@ class Game extends Component {
               // you had no cards of any that suit
               this.props.playCard(gameId, sortedSelectedCards);
             } else {
-              console.log('You must play pairs if you have pairs, otherwise you must play cards of the same suit. Then you may play whatever you want.');
+              this.setState({ error: 'You must play pairs of same suit, otherwise play cards of same suit.'});
             }
           } else if (firstCard.suit === secondCard.suit) {
             // 2 card shuai
@@ -555,12 +563,12 @@ class Game extends Component {
             if (beforeLength - playable.length === 2 || playable.length === 0) {
               this.props.playCard(gameId, sortedSelectedCards);
             } else if (beforeLength - playable.length === 1) {
-              console.log('You played two cards one with same suit, other is not same suit.');
+              this.setState({ error: 'You played two cards. One with same suit and the other is not' });
             } else {
-              console.log('You played two cards that are not the same suit as the first played.');
+              this.setState({ error: 'You played two cards that are not the same suit as the first played' });
             }
           } else {
-            console.log('You played neither a pair or 2 card shuai.');
+            this.setState({ error: 'You played neither a pair or 2 card Shuai' });
           }
         } else if (sortedSelectedCards.length > 2) {
           // when length is > 2 it could be a shuai or Tuolaji.
@@ -852,7 +860,7 @@ class Game extends Component {
               // you had no cards of any that suit
               this.props.playCard(gameId, sortedSelectedCards);
             } else {
-              console.log('You must play consecutive pairs if you have, then pairs, then same suit, then whatever you want.');
+              this.setState({ error: 'You must play consecutive pairs if you have, then pairs of same suit, then any cards of same suit' });
             }
           } else if (isShuai) {
             // we have a shuai that is either paired or not.
@@ -946,7 +954,7 @@ class Game extends Component {
                 // no pairs or cards of suit play whatever
                 this.props.playCard(gameId, sortedSelectedCards);
               } else {
-                console.log('You must play pairs if you have them, then suits, then whatever');
+                this.setState({ error: 'You must play pairs of same suit, then cards of same suits' });
               }
             } else {
               // if not pair we want to look through hand for same suits.
@@ -974,35 +982,20 @@ class Game extends Component {
               if (beforeLength - playable.length === firstPlayed.length || playable.length === 0) {
                 this.props.playCard(gameId, sortedSelectedCards);
               } else if (beforeLength - playable.length < firstPlayed.length) {
-                console.log('You played less than the amount required');
+                this.setState({ error: 'You played less cards than required' });
               } else {
-                console.log('You played cards that are not the same suit as the first played.');
+                this.setState({ error: 'You played cards that are not the same suit as the first played' });
               }
             }
           } else {
-            console.log('Not Tuolaji or Shuai');
+            this.setState({ error: 'You did not play a Tuolaji or Shuai' });
           }
         }
       } else {
         // lengths are not the same
-        console.log('Must play the same amount of cards.');
+        this.setState({ error: 'You must play the same amount of cards' });
       }
     }
-    // are there problems? write them down here
-    // problem three
-    // [ 3h, 3h ] was the hand played and hearts is not trump.
-    // player_2 tries to play [ 4d, 4h ] but in his hand he has [ 4h, 4h ].
-    // so he should not be able to play [ 4d, 4h ].
-    // this problem is not solved and should be solved tomorrow
-
-    // problem four (for reference)
-    // player_1 plays [ 4h, 4h, 4c, 4c ]
-    // player_3 has [ 3s, B, 2h, 3c, 3h ], does he have to play both 3c and 3h?
-    // right now he does. i assume he has to play both.
-
-    // problem five
-    // if player_1 plays a Tuolaji make sure the other
-    // players must play cards of that suit if they have it.
     this.props.emptySelectedCard();
   }
 
@@ -1299,6 +1292,9 @@ class Game extends Component {
                   {this.renderCenterCards()}
                 </div>
                 : null}
+              {this.state.error !== ''
+                ? <div className="error">{this.state.error}</div>
+                : null}
             </div>
             <div className={`right ${this.props.phase !== 'swapPhase' && this.props.gameInfo.turn === this.getUser(3).player}-3`}>
               {this.getUser(3).playerName}
@@ -1348,7 +1344,8 @@ function mapStateToProps(state) {
     gameInfo: state.gameInfo.data,
     selectedCards: state.selectedCards,
     swapCards: state.swapCards,
-    phase: state.phase };
+    phase: state.phase
+  };
 }
 
 export default connect(mapStateToProps, actions)(Game);
