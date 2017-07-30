@@ -12,11 +12,15 @@ import './style/index.css';
 
 const store = configureStore();
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Routes />
-  </Provider>,
-  document.getElementById('root')
-);
+const render = Component => {
+  ReactDOM.render(
+    <Provider store={store}>
+      <Component />
+    </Provider>,
+    document.getElementById('root')
+  );
+}
+
+render(Routes);
 
 registerServiceWorker();

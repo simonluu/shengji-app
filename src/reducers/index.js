@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { routerReducer } from 'react-router-redux';
 import _ from 'lodash';
 
 import {
@@ -112,6 +113,7 @@ const rootReducer = combineReducers({
   swapCards: swapCardReducer,
   gameInfo: gameReducer,
   currentUser: currentUserReducer,
+  router: routerReducer,
 });
 
 export default rootReducer;
