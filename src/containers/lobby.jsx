@@ -9,7 +9,7 @@ import * as actions from '../actions';
 
 const cookies = new Cookies();
 const currentTime = new Date();
-currentTime.setTime(currentTime.getTime() + 28800000);
+currentTime.setTime(currentTime.getTime() + 25200000);
 
 class Lobby extends Component {
   constructor(props) {
