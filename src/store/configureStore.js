@@ -27,8 +27,6 @@ const configureStore = () => {
 
   const saved_game_data = JSON.parse(sessionStorage.getItem('reduxPersist:gameInfo'));
 
-  console.log(saved_game_data)
-
   if (saved_game_data && saved_game_data.data !== undefined) {
     if (saved_game_data.data.gameId && _.includes(saved_game_data.data.users, store.getState().currentUser)) {
       socket.emit('user_reconnect', saved_game_data.data.gameId);

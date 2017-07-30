@@ -8,6 +8,8 @@ import _ from 'lodash';
 import * as actions from '../actions';
 
 const cookies = new Cookies();
+const currentTime = new Date();
+currentTime.setTime(currentTime.getTime() + 28800000);
 
 class Lobby extends Component {
   constructor(props) {
@@ -21,7 +23,7 @@ class Lobby extends Component {
   // life cycle methods
   componentDidUpdate() {
     if (this.props.gameInfo.gameStart) {
-      cookies.set('uniqueGameId', `${this.props.gameInfo.gameId}`, { path: '/' });
+      cookies.set('uniqueGameId', `${this.props.gameInfo.gameId}`, { path: '/', expires: currentTime });
       this.props.history.push(`/game/${this.props.gameInfo.gameId}`);
     }
   }
