@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 import _ from 'lodash';
 
 import * as actions from '../actions';
 
 import CardHolder from '../components/card-holder';
 import Card from './card';
+
+const cookies = new Cookies();
 
 // IF A BIG JOKER HAS BEEN PLAYED THE NEXT BIG JOKER DOES NOT WIN.
 // Features to implement:
@@ -1249,67 +1252,73 @@ class Game extends Component {
   }
 
   render() {
-    if (!_.isEmpty(this.props.gameInfo)) {
-      if (this.props.gameInfo.player_1 && this.props.gameInfo.player_2 && this.props.gameInfo.player_3 && this.props.gameInfo.player_4) {
-        return (
-          <div className="game-page">
-            <div className="flex-top">
-              <CardHolder position="top" user={this.getUser(2)} />
-              <div className={`${this.props.phase !== 'swapPhase' && this.props.gameInfo.turn === this.getUser(2).player}-2`}>
-                {this.getUser(2).playerName}
-              </div>
-            </div>
-            <div className="flex-middle">
-              <CardHolder position="left" user={this.getUser(1)} />
-              <div className={`left ${this.props.phase !== 'swapPhase' && this.props.gameInfo.turn === this.getUser(1).player}-1`}>
-                {this.getUser(1).playerName}
-              </div>
-              <div className="game-info">
-                {this.props.gameInfo.trumpSuit !== '' ? <div className="trump-suit">{this.renderTrumpSuit()}</div> : null}
-                <div
-                  className="deck"
-                  role="presentation"
-                  onClick={() => this.drawCard()}
-                >
-                  {this.props.gameInfo.deck.length}
+    if (cookies.get('uniqueGameId') === this.props.location.pathname.split('/game/')[1]) {
+      if (!_.isEmpty(this.props.gameInfo)) {
+        if (this.props.gameInfo.player_1 && this.props.gameInfo.player_2 && this.props.gameInfo.player_3 && this.props.gameInfo.player_4) {
+          return (
+            <div className="game-page">
+              <div className="flex-top">
+                <CardHolder position="top" user={this.getUser(2)} />
+                <div className={`${this.props.phase !== 'swapPhase' && this.props.gameInfo.turn === this.getUser(2).player}-2`}>
+                  {this.getUser(2).playerName}
                 </div>
-                {this.props.phase === 'drawPhase' ? <button className="reveal-trump-button" onClick={() => this.onRevealTrumpClick()}>Reveal Trump</button> : null}
-                {this.props.phase === 'swapPhase' && this.props.gameInfo.currentMaster !== '' && this.props.gameInfo[this.props.gameInfo.currentMaster].playerName === sessionStorage.currentUser ? <button className="swap-button" onClick={() => this.swapCardsClick()}>Swap Cards</button> : null}
-                {this.props.phase === 'playPhase' && this.props.gameInfo[this.props.gameInfo.turn].playerName === sessionStorage.currentUser ? <button className="play-button" onClick={() => this.playCardsClick()}>Play Cards</button> : null}
-                {this.props.gameInfo.deck.length === 8 && this.props.phase === 'drawPhase' ? <div ref='timer'>{this.state.counter}</div> : null}
-                {this.props.phase === 'swapPhase' && this.props.gameInfo.currentMaster !== '' && this.props.gameInfo[this.props.gameInfo.currentMaster].playerName === sessionStorage.currentUser ? <div className="swapable-cards">{this.renderMiddleCards()}</div> : null}
-                {this.props.gameInfo.revealedTrump.length !== 0
-                  && this.props.phase === 'drawPhase'
-                  ? <div ref='revealedCards' className="revealed-cards">
-                    {this.renderRevealedCards()}
+              </div>
+              <div className="flex-middle">
+                <CardHolder position="left" user={this.getUser(1)} />
+                <div className={`left ${this.props.phase !== 'swapPhase' && this.props.gameInfo.turn === this.getUser(1).player}-1`}>
+                  {this.getUser(1).playerName}
+                </div>
+                <div className="game-info">
+                  {this.props.gameInfo.trumpSuit !== '' ? <div className="trump-suit">{this.renderTrumpSuit()}</div> : null}
+                  <div
+                    className="deck"
+                    role="presentation"
+                    onClick={() => this.drawCard()}
+                  >
+                    {this.props.gameInfo.deck.length}
                   </div>
-                  : null}
-                {this.props.gameInfo.center.length !== 0
-                  ? <div className="center-cards">
-                    {this.renderCenterCards()}
-                  </div>
-                  : null}
-                {this.state.error !== ''
-                  ? <div className="error">{this.state.error}</div>
-                  : null}
+                  {this.props.phase === 'drawPhase' ? <button className="reveal-trump-button" onClick={() => this.onRevealTrumpClick()}>Reveal Trump</button> : null}
+                  {this.props.phase === 'swapPhase' && this.props.gameInfo.currentMaster !== '' && this.props.gameInfo[this.props.gameInfo.currentMaster].playerName === sessionStorage.currentUser ? <button className="swap-button" onClick={() => this.swapCardsClick()}>Swap Cards</button> : null}
+                  {this.props.phase === 'playPhase' && this.props.gameInfo[this.props.gameInfo.turn].playerName === sessionStorage.currentUser ? <button className="play-button" onClick={() => this.playCardsClick()}>Play Cards</button> : null}
+                  {this.props.gameInfo.deck.length === 8 && this.props.phase === 'drawPhase' ? <div ref='timer'>{this.state.counter}</div> : null}
+                  {this.props.phase === 'swapPhase' && this.props.gameInfo.currentMaster !== '' && this.props.gameInfo[this.props.gameInfo.currentMaster].playerName === sessionStorage.currentUser ? <div className="swapable-cards">{this.renderMiddleCards()}</div> : null}
+                  {this.props.gameInfo.revealedTrump.length !== 0
+                    && this.props.phase === 'drawPhase'
+                    ? <div ref='revealedCards' className="revealed-cards">
+                      {this.renderRevealedCards()}
+                    </div>
+                    : null}
+                  {this.props.gameInfo.center.length !== 0
+                    ? <div className="center-cards">
+                      {this.renderCenterCards()}
+                    </div>
+                    : null}
+                  {this.state.error !== ''
+                    ? <div className="error">{this.state.error}</div>
+                    : null}
+                </div>
+                <div className={`right ${this.props.phase !== 'swapPhase' && this.props.gameInfo.turn === this.getUser(3).player}-3`}>
+                  {this.getUser(3).playerName}
+                </div>
+                <CardHolder position="right" user={this.getUser(3)} />
               </div>
-              <div className={`right ${this.props.phase !== 'swapPhase' && this.props.gameInfo.turn === this.getUser(3).player}-3`}>
-                {this.getUser(3).playerName}
+              <div className="flex-bottom">
+                <div className={`bottom ${this.props.phase !== 'swapPhase' && this.props.gameInfo.turn === this.getUser(0).player}-0`}>
+                  {this.getUser(0).playerName}
+                </div>
+                <CardHolder position="bottom" user={this.getUser(0)} />
               </div>
-              <CardHolder position="right" user={this.getUser(3)} />
             </div>
-            <div className="flex-bottom">
-              <div className={`bottom ${this.props.phase !== 'swapPhase' && this.props.gameInfo.turn === this.getUser(0).player}-0`}>
-                {this.getUser(0).playerName}
-              </div>
-              <CardHolder position="bottom" user={this.getUser(0)} />
-            </div>
-          </div>
+          );
+        }
+      } else {
+        return (
+          <div className="loading">Loading...</div>
         );
       }
     } else {
       return (
-        <div className="loading">Loading...</div>
+        <Redirect to="/" />
       );
     }
   }

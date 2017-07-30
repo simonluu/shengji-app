@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 import _ from 'lodash';
 
 import * as actions from '../actions';
+
+const cookies = new Cookies();
 
 class Lobby extends Component {
   constructor(props) {
@@ -18,6 +21,7 @@ class Lobby extends Component {
   // life cycle methods
   componentDidUpdate() {
     if (this.props.gameInfo.gameStart) {
+      cookies.set('uniqueGameId', `${this.props.gameInfo.gameId}`, { path: '/' });
       this.props.history.push(`/game/${this.props.gameInfo.gameId}`);
     }
   }
