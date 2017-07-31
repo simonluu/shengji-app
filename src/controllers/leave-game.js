@@ -12,9 +12,7 @@ module.exports = (req, res, next) => {
       return res.status(422).send({ error: 'Game does not exist' });
     }
 
-    const newTeam = existingGame.teams.splice(indexOfUser, 1);
-
-    existingGame.teams = newTeam;
+    existingGame.teams.splice(indexOfUser, 1);
 
     existingGame.save();
 

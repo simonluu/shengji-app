@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
       return res.status(422).send({ error: 'Game does not exist' });
     }
 
-    let newTeam = existingGame.teams;
+    const newTeam = existingGame.teams;
     newTeam[index] = value;
 
     Game.model.findOneAndUpdate({ gameId }, { teams: newTeam }, { new: true }, (err, newGame) => {
