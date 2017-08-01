@@ -1,6 +1,6 @@
-<h3 align="center">
+<h1 align="center">
   Shengji App
-</h3>
+</h1>
 
 ## About
 
