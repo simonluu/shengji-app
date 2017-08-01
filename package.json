@@ -30,7 +30,7 @@
     "react-scripts": "1.0.7"
   },
   "scripts": {
-    "dev": "nodemon ./src/server.js",
+    "dev": "nodemon ./src/server/index.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

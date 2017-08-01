@@ -62,6 +62,8 @@ class Lobby extends Component {
         return oneCount += 1;
       } else if (team === 2) {
         return twoCount += 1;
+      } else {
+        return null;
       }
     });
     if (oneCount === 2 && twoCount === 2) {

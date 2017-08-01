@@ -18,13 +18,12 @@ app.use(morgan('combined'));
 app.use(bodyParser.json({ type: '*/*' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.use('/', express.static(`${__dirname}/`));
-app.use(express.static(path.resolve(__dirname, '..', 'build')));
+app.use(express.static(path.resolve(__dirname, '..', '..', 'build')));
 
 router(app);
 
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '..', '..', 'build', 'index.html'));
 });
 
 // Server Setup

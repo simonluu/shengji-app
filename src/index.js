@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import configureStore from './store/configureStore';
-import Routes from './routes';
-import registerServiceWorker from './registerServiceWorker';
+import configureStore from './common/store/configureStore';
+import Routes from './common/routes';
+import registerServiceWorker from './client/registerServiceWorker';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
-import './style/index.css';
+import './client/styles/index.css';
 
 const store = configureStore();
 
