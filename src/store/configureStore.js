@@ -23,7 +23,7 @@ const configureStore = () => {
     applyMiddleware(Async, routerMiddlewareInstance, socketIoMiddleware),
   );
 
-  persistStore(store, { whitelist: ['gameInfo'], blacklist: ['currentUser', 'selectedCards', 'swapCards', 'phase'], storage: asyncSessionStorage });
+  persistStore(store, { whitelist: ['gameInfo', 'phase'], blacklist: ['currentUser', 'selectedCards', 'swapCards'], storage: asyncSessionStorage });
 
   const saved_game_data = JSON.parse(sessionStorage.getItem('reduxPersist:gameInfo'));
 

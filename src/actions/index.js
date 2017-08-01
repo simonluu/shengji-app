@@ -155,7 +155,7 @@ export function createGame(name, reroute) {
 
   const request = axios.post('/api/create-game', {
     gameId,
-    creator: [name],
+    creator: [name.toLowerCase()],
   }).then((response) => {
     if (response.status === 200) {
       reroute();
@@ -174,7 +174,7 @@ export function createGame(name, reroute) {
 export function joinGame(gameId, name, reroute) {
   const request = axios.post('/api/join-game', {
     gameId,
-    userJoined: name,
+    userJoined: name.toLowerCase(),
   }).then((response) => {
     if (response.status === 200) {
       reroute();
@@ -300,7 +300,7 @@ export function playCard(gameId, card) {
   };
 }
 
-export function phaseEnd(gameId) {
+export function phaseEnd(gameId, center) {
   const request = axios.post('/api/phase-end', {
     gameId,
   }).catch((error) => {
@@ -310,6 +310,7 @@ export function phaseEnd(gameId) {
   return {
     type: `${server+PHASE_END}`,
     payload: request,
+    previous: center,
   };
 }
 

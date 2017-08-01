@@ -24,6 +24,7 @@ class Lobby extends Component {
   componentDidUpdate() {
     if (this.props.gameInfo.gameStart) {
       cookies.set('uniqueGameId', `${this.props.gameInfo.gameId}`, { path: '/', expires: currentTime });
+      this.props.changePhase(this.props.gameInfo.gameId, 'drawPhase');
       this.props.history.push(`/game/${this.props.gameInfo.gameId}`);
     }
   }
@@ -59,7 +60,7 @@ class Lobby extends Component {
     this.props.gameInfo.teams.map((team) => {
       if (team === 1) {
         return oneCount += 1;
-      } else {
+      } else if (team === 2) {
         return twoCount += 1;
       }
     });
@@ -78,7 +79,7 @@ class Lobby extends Component {
     if (this.props.gameInfo.users !== undefined && this.props.gameInfo.teams !== undefined) {
       const userArray = [];
       this.props.gameInfo.users.map((user, index) => {
-        if (user === sessionStorage.getItem('currentUser')) {
+        if (user.toLowerCase() === sessionStorage.getItem('currentUser')) {
           userArray.push(
             <li key={`${user}`} className="user-element">
               {user}

@@ -23,7 +23,7 @@ class Game extends Component {
     this.state = {
       error: '',
       phaseTimer: null,
-      counter: 5,
+      counter: 30,
     };
 
     this.drawCard = this.drawCard.bind(this);
@@ -36,6 +36,8 @@ class Game extends Component {
     this.renderMiddleCards = this.renderMiddleCards.bind(this);
     this.renderCenterCards = this.renderCenterCards.bind(this);
     this.renderTrumpSuit = this.renderTrumpSuit.bind(this);
+    this.renderPreviousHand = this.renderPreviousHand.bind(this);
+    this.renderPlayedBy = this.renderPlayedBy.bind(this);
     this.swapCardsClick = this.swapCardsClick.bind(this);
     this.playCardsClick = this.playCardsClick.bind(this);
   }
@@ -44,7 +46,7 @@ class Game extends Component {
   componentDidUpdate() {
     // just played fourth card
     if (this.props.gameInfo.currentMaster !== '' && this.props.gameInfo[this.props.gameInfo.currentMaster].playerName === sessionStorage.currentUser && this.props.phase === 'playPhase' && this.props.gameInfo.turnNumber === 4) {
-      this.props.phaseEnd(this.props.gameInfo.gameId);
+      this.props.phaseEnd(this.props.gameInfo.gameId, this.props.gameInfo.center);
 
       if (this.props.gameInfo.player_1.hand.length === 0 && this.props.gameInfo.player_2.hand.length === 0 && this.props.gameInfo.player_3.hand.length === 0 && this.props.gameInfo.player_4.hand.length === 0) {
         this.props.restartRound(this.props.gameInfo.gameId);
@@ -1031,7 +1033,7 @@ class Game extends Component {
   setCountdown() {
     if (this.props.phase !== 'drawPhase') {
       clearInterval(this.state.phaseTimer);
-      this.setState({ counter: 6, phaseTimer: null });
+      this.setState({ counter: 31, phaseTimer: null });
     }
     this.setState({ counter: this.state.counter - 1 });
     if (this.state.counter === 0) {
@@ -1064,7 +1066,7 @@ class Game extends Component {
           this.props.changePhase(this.props.gameInfo.gameId, 'swapPhase');
         }
       }
-      this.setState({ counter: 5, phaseTimer: null });
+      this.setState({ counter: 30, phaseTimer: null });
     }
   }
 
@@ -1246,9 +1248,46 @@ class Game extends Component {
     }
     return (
       <div>
-        {renderSuit}
+        {this.props.gameInfo.trumpNumber}{renderSuit}
       </div>
     );
+  }
+
+  renderPreviousHand() {
+    const previousHand = [];
+    this.props.center.map((card) => {
+      previousHand.push(
+        <Card
+          playable={false}
+          hand={false}
+          name={card.name}
+          suit={card.suit}
+          value={card.value}
+          playedBy={card.playedBy}
+          unique={card.unique}
+          sortValue={card.sortValue}
+          trump={card.trump}
+          _id={card._id}
+        />,
+      );
+      return null;
+    });
+
+    return previousHand;
+  }
+
+  renderPlayedBy() {
+    const playedBy = [];
+    this.props.center.map((card) => {
+      playedBy.push(
+        <span>
+          {this.props.gameInfo[card.playedBy].playerName}
+        </span>
+      );
+      return null;
+    });
+
+    return playedBy
   }
 
   render() {
@@ -1293,6 +1332,18 @@ class Game extends Component {
                       {this.renderCenterCards()}
                     </div>
                     : null}
+                  {this.props.phase === 'playPhase' && this.props.center.length > 0
+                    ? <div>
+                        <div className="winning-cards">
+                          Previous Trick:
+                          {this.renderPreviousHand()}
+                        </div>
+                        <div className="played-by">
+                          Played By:
+                          {this.renderPlayedBy()}
+                        </div>
+                    </div>
+                    : null}
                   {this.state.error !== ''
                     ? <div className="error">{this.state.error}</div>
                     : null}
@@ -1305,6 +1356,20 @@ class Game extends Component {
               <div className="flex-bottom">
                 <div className={`bottom ${this.props.phase !== 'swapPhase' && this.props.gameInfo.turn === this.getUser(0).player}-0`}>
                   {this.getUser(0).playerName}
+                </div>
+                {this.props.phase === 'playPhase' || this.props.gameInfo.round > 0
+                  ? <div className="score">
+                      {this.getUser(2).master === false ? <span>{this.getUser(2).playerName}'s Score: {this.getUser(2).score}</span> : null}
+                      {this.getUser(1).master === false ? <span>{this.getUser(1).playerName}'s Score: {this.getUser(1).score}</span> : null}
+                      {this.getUser(3).master === false ? <span>{this.getUser(3).playerName}'s Score: {this.getUser(3).score}</span> : null}
+                      {this.getUser(0).master === false ? <span>{this.getUser(0).playerName}'s Score: {this.getUser(0).score}</span> : null}
+                  </div>
+                  : null}
+                <div className="user-trump-numbers">
+                  <span>{this.getUser(2).playerName}'s Trump Number: {this.getUser(2).trumpNumber}</span>
+                  <span>{this.getUser(1).playerName}'s Trump Number: {this.getUser(1).trumpNumber}</span>
+                  <span>{this.getUser(3).playerName}'s Trump Number: {this.getUser(3).trumpNumber}</span>
+                  <span>{this.getUser(0).playerName}'s Trump Number: {this.getUser(0).trumpNumber}</span>
                 </div>
                 <CardHolder position="bottom" user={this.getUser(0)} />
               </div>
@@ -1329,6 +1394,7 @@ Game.propTypes = {
   selectedCards: PropTypes.array,
   swapCards: PropTypes.array,
   phase: PropTypes.string,
+  center: PropTypes.array,
   playCard: PropTypes.func,
   deleteGame: PropTypes.func,
   addCardToHand: PropTypes.func,
@@ -1346,7 +1412,8 @@ function mapStateToProps(state) {
     gameInfo: state.gameInfo.data,
     selectedCards: state.selectedCards,
     swapCards: state.swapCards,
-    phase: state.phase
+    phase: state.phase,
+    center: state.center,
   };
 }
 

@@ -82,7 +82,7 @@ io.on('connection', (socket) => {
         io.in(data.data.gameId).emit('action', { payload: data, type: 'PLAY_CARD' });
         break;
       case 'server/PHASE_END':
-        io.in(data.data.gameId).emit('action', { payload: data, type: 'PHASE_END' });
+        io.in(data.data.gameId).emit('action', { payload: data, previous: action.previous, type: 'PHASE_END' });
         break;
       case 'server/RESTART_ROUND':
         io.in(data.data.gameId).emit('action', { payload: data, type: 'RESTART_ROUND' });

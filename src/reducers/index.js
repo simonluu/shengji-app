@@ -26,6 +26,15 @@ import {
   RESTART_ROUND,
 } from '../actions';
 
+function centerReducer(state = [], action) {
+  switch (action.type) {
+    case PHASE_END:
+      return action.previous;
+    default:
+      return state;
+  }
+}
+
 function phaseReducer(state = 'drawPhase', action) {
   switch (action.type) {
     case CHANGE_PHASE:
@@ -64,31 +73,20 @@ function swapCardReducer(state = [], action) {
 function gameReducer(state = {}, action) {
   switch (action.type) {
     case GET_GAME:
-      return Object.assign({}, state, action.payload);
     case CHANGE_TEAM:
+    case JOIN_GAME:
+    case LEAVE_GAME:
+    case DELETE_GAME:
+    case START_GAME:
+    case ADD_CARD:
+    case SET_MASTER:
+    case SWAP_CARD:
+    case PLAY_CARD:
+    case PHASE_END:
+    case RESTART_ROUND:
       return Object.assign({}, state, action.payload);
     case CREATE_GAME:
-      sessionStorage.setItem('currentUser', action.payload.data.users[0]);
-      return Object.assign({}, state, action.payload);
-    case JOIN_GAME:
-      return Object.assign({}, state, action.payload);
-    case LEAVE_GAME:
-      return Object.assign({}, state, action.payload);
-    case DELETE_GAME:
-      return Object.assign({}, state, action.payload);
-    case START_GAME:
-      return Object.assign({}, state, action.payload);
-    case ADD_CARD:
-      return Object.assign({}, state, action.payload);
-    case SET_MASTER:
-      return Object.assign({}, state, action.payload);
-    case SWAP_CARD:
-      return Object.assign({}, state, action.payload);
-    case PLAY_CARD:
-      return Object.assign({}, state, action.payload);
-    case PHASE_END:
-      return Object.assign({}, state, action.payload);
-    case RESTART_ROUND:
+      sessionStorage.setItem('currentUser', action.payload.data.users[0].toLowerCase());
       return Object.assign({}, state, action.payload);
     default:
       return state;
@@ -100,7 +98,7 @@ const initialUserState = { currentUser: '' };
 function currentUserReducer(state = initialUserState.currentUser, action) {
   switch (action.type) {
     case CURRENT_USER:
-      sessionStorage.setItem('currentUser', action.payload);
+      sessionStorage.setItem('currentUser', action.payload.toLowerCase());
       return action.payload;
     default:
       return sessionStorage.currentUser || state;
@@ -112,6 +110,7 @@ const rootReducer = combineReducers({
   selectedCards: selectedCardReducer,
   swapCards: swapCardReducer,
   gameInfo: gameReducer,
+  center: centerReducer,
   currentUser: currentUserReducer,
   router: routerReducer,
 });

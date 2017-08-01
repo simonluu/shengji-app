@@ -291,6 +291,14 @@ ol, ul {
   color: red;
 }
 
+.score > span, .user-trump-numbers > span, .played-by > span {
+  margin-right: 5px;
+}
+
+.played-by > span {
+  margin-left: 10px;
+}
+
 
 
 
