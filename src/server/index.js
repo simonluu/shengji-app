@@ -11,7 +11,7 @@ const app = express();
 const router = require('./config/router');
 
 // DB Setup
-mongoose.connect('mongodb://localhost:test');
+mongoose.connect('mongodb://localhost:test', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 
 // App Setup
 app.use(morgan('combined'));

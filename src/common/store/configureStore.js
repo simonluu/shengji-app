@@ -1,29 +1,29 @@
 import { createStore, applyMiddleware } from 'redux';
 import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
-import { persistStore, autoRehydrate } from 'redux-persist';
-import { asyncSessionStorage } from 'redux-persist/storages';
-import { routerMiddleware } from 'react-router-redux';
-import createHistory from 'history/createBrowserHistory';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import _ from 'lodash';
 
 import reducers from '../reducers';
 import Async from '../middlewares/async';
 
-export const history = createHistory();
-const routerMiddlewareInstance = routerMiddleware(history);
-
 const socket = io();
 const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
 
+const persistConfig = {
+  key: 'root',
+  storage: storage,
+  whitelist: ['gameInfo', 'phase'],
+  blacklist: ['currentUser', 'selectedCards', 'swapCards']
+};
+const persistedReducer = persistReducer(persistConfig, reducers);
+
 const configureStore = () => {
   const store = createStore(
-    reducers,
-    autoRehydrate(),
-    applyMiddleware(Async, routerMiddlewareInstance, socketIoMiddleware),
+    persistedReducer,
+    applyMiddleware(Async, socketIoMiddleware),
   );
-
-  persistStore(store, { whitelist: ['gameInfo', 'phase'], blacklist: ['currentUser', 'selectedCards', 'swapCards'], storage: asyncSessionStorage });
 
   const saved_game_data = JSON.parse(sessionStorage.getItem('reduxPersist:gameInfo'));
 
@@ -44,4 +44,5 @@ const configureStore = () => {
   return store;
 }
 
-export default configureStore;
+export let store = configureStore();
+export let persistor = persistStore(store);

@@ -1,7 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
-import { history } from './store/configureStore';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // imports main application
 import App from './components/app';
@@ -16,7 +14,7 @@ import GameOver from './containers/game-over';
 
 export const Routes = () => {
   return (
-    <ConnectedRouter history={history}>
+    <Router>
       <div>
         <App>
           <Switch>
@@ -34,7 +32,7 @@ export const Routes = () => {
           </Switch>
         </App>
       </div>
-    </ConnectedRouter>
+    </Router>
   );
 };
 

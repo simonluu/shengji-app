@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { routerReducer } from 'react-router-redux';
 import _ from 'lodash';
 
 import {
@@ -112,7 +111,6 @@ const rootReducer = combineReducers({
   gameInfo: gameReducer,
   center: centerReducer,
   currentUser: currentUserReducer,
-  router: routerReducer,
 });
 
 export default rootReducer;
